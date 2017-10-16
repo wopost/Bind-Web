@@ -1,0 +1,122 @@
+#!/bin/bash
+# named a network name service.
+# chkconfig: 345 35 75
+# description: a name server
+ 
+[ -r /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+ 
+Builddir=/usr/local/bind
+PidFile=/usr/local/bind/var/run/named/named.pid
+LockFile=/var/lock/subsys/named
+Sbindir=${Builddir}/sbin
+Configfile=${Builddir}/etc/named.conf
+CheckConf=${Builddir}/sbin/named-checkconf
+named=named
+ 
+if [ ! -f ${Configfile} ]
+then
+    echo "Can't find named.conf " 
+    exit 1 
+fi
+ 
+if [ ! -d /var/run/named/ ]  
+then
+    echo "could not open directory '/var/run/named/': Permission denied " 
+    exit 1
+elif [ ! -w /var/run/named/ ]
+    then
+        echo "could not open directory '/var/run/named/': Permission denied "
+        exit 1
+fi
+ 
+ 
+if [ ! -r ${Configfile} ]
+then
+    echo "Error: ${Configfile} is not readfile!"
+    exit 1
+else
+    $CheckConf
+    if [ $? != 0 ]
+    then
+        echo -e "Please check config file in \033[31m${Configfile} \033[0m!"
+        exit 2
+    fi
+fi
+ 
+ 
+ 
+ 
+ 
+start() {
+    [ -x ${Builddir}/sbin/$named ] ||   exit 4
+    if [ -f $LockFile ]; then
+        echo -n "$named is already running..."
+        echo_failure
+        echo
+        exit 5
+    fi
+     
+    echo -n "Starting $named: "
+    daemon --pidfile "$PidFile" ${Sbindir}/$named -u named -4 -c ${Configfile}
+    RETVAL=$?
+    echo
+    if [ $RETVAL -eq 0 ]; then
+        touch $LockFile
+        return 0
+    else
+        rm -f $LockFile $PidFile
+        return 1
+    fi
+}
+ 
+stop() {
+    if [ ! -f $LockFile ];then
+        echo "$named is not started."
+        echo_failure
+    fi
+ 
+    echo -n "Stopping $named: "
+    killproc $named
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $LockFile
+    return 0
+}
+ 
+restart() {
+    stop
+    sleep 1
+    start
+}
+ 
+reload() {
+    echo -n "Reloading $named: "
+    killproc $named -HUP
+    RETVAL=$?
+    echo
+    return $RETVAL
+}
+ 
+status() {
+    if pidof $named > /dev/null && [ -f $PidFile ]; then
+        echo "$named is running..."
+    else
+        echo "$named is stopped..."
+    fi
+}
+ 
+case $1 in
+start)
+    start ;;
+stop) 
+    stop ;;
+restart)
+    restart ;;
+reload)
+    reload ;;
+status)
+    status ;;
+*)
+    echo "Usage:named {start|stop|status|reload|restart}"
+    exit 2;;
+esac

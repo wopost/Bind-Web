@@ -11,7 +11,7 @@
 描述： 
 数据库安装就不在絮叨，了解运维的同学都应该知道
 
-一．源码安装配置Bind:
+<h2 align = "center">一．源码安装配置Bind: </h2>
 
 1.源码编译安装
 
@@ -141,7 +141,7 @@
 ![image](https://github.com/1032231418/doc/blob/master/images/5.png)
 
 
-二．配置Bind-Web 管理平台
+<h2 align = "center">二．配置Bind-Web 管理平台 </h2>
 
 上传 Bind-web-1.0.tar.gz 管理平台
 

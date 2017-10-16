@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+    {% block  role%}
+        {% if msg.role== 0 %}
+               超级管理员
+        {% else %} 
+               普通用户
+        {% endif %}
+   {% endblock%}
+   
+   {% block  username%}
+   {{msg.username}}
+   {% endblock%}
+     <!--导航 -->
+    {% block  navigation%}
+        <a href="/namedlist">域名管理 </a>
+    {% endblock%}
+
+
+{% block content%}
+<!--正文 -->
+<a  class="btn btn-sm btn-primary"  id="AddZone" style="float:left"> 添加域名解析</a> 
+<br />
+<br />
+<table class="table table-striped table-bordered table-hover " id="editable">
+<thead>
+    <tr>
+        <th class="text-center">根域</th>
+        <th class="text-center">二级域名</th>
+        <th class="text-center">记录类型</th>
+        <th class="text-center">记录值</th>
+        <th class="text-center">TTL</th>
+        <th class="text-center">操作</th>
+    </tr>
+</thead>
+<tbody>
+          {% for item in result%}
+        <tr class="gradeX">
+                <td class="text-center ">
+					<a list_id='{{item.id}}' class="detail" >{{item.zone}}</a>
+				</td>
+                <td class="text-center">{{item.host}}</td>
+                <td class="text-center">{{item.type}}</td>
+                <td class="text-center">{{item.data}}</td>
+                <td class="text-center">{{item.ttl}}</td>
+                <td class="text-center">
+                    <button data-id="{{item.id}}" class="btn btn-xs btn-info update">编辑</button>
+                    <button data-id="{{item.id}}" class="btn btn-xs btn-danger del ">删除</button>
+                </td>
+            </td>
+         </tr>
+         {% endfor %}
+ </tbody>
+</table>
+
+<!--域名添加模态框-->
+<div class="modal fade"  id ="AddZoneModal">   
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">域名解析添加</h4> 
+      </div>
+      <div class="modal-body">
+        <p hidden id="uperrorMsg" class="text-danger" style="color:red"></p> <!-- for error msg-->
+            <form id="addzoneForm" class="form-horizontal adduser nice-validator n-yellow" novalidate="novalidate">
+            <div class="form-group">
+                <label for="zone" class="col-sm-2 control-label">根域<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="addzone" name="zone" placeholder="google.com" type="text" class="form-control"  datatype="s2-16" errormsg="域名格式不正确" >
+                </div>
+            </div><!--域-->
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="host" class="col-sm-2 control-label">二级域名<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="addhost" name="host" placeholder="www" type="text" class="form-control" datatype="s1-16" errormsg="请填写主机记录">
+                </div>
+            </div><!--主机记录-->
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="type" class="col-sm-2 control-label">记录类型<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="addtype" name="type"  value = "A" placeholder="A" class="form-control" datatype="s1-1" errormsg="记录类型不合规">
+                </div>
+            </div><!--记录类型-->
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="data" class="col-sm-2 control-label">记录值<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="adddata" name="data"   placeholder="0.0.0.0" class="form-control" datatype="s1-16" errormsg="记录值错误">
+                </div>
+            </div><!--记录值-->
+
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="ttl" class="col-sm-2 control-label">TTL<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="addttl" name="ttl"   value="60" placeholder="" class="form-control" datatype="n1-11" errormsg="ttl值错误">
+                </div>
+            </div><!--TTSL-->
+
+        <div class="form-group">
+            <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addzonebtn">确认</button>
+            </div>
+        </div> <!--button-->
+        </form> <!--form-->
+      </div> <!--modal-body-->
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<!--更新模态窗-->
+<div class="modal fade"  id ="updateModal">   
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">更新解析记录</h4> 
+      </div>
+      <div class="modal-body">
+        <p hidden id="uperrorMsg" class="text-danger" style="color:red"></p> <!-- for error msg-->
+            <form id="updateForm" class="form-horizontal nice-validator n-yellow" novalidate="novalidate">
+            <input type="hidden" id='upid' name="id"><!--update need id-->
+            <div class="form-group">
+                <label for="zone" class="col-sm-2 control-label">根域<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="zone" name="zone" placeholder="zone" type="text" class="form-control" readonly="">
+                </div>
+            </div><!--域-->
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="host" class="col-sm-2 control-label">二级域名<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="host" name="host" placeholder="host" type="text" class="form-control">
+                </div>
+            </div><!--主机记录-->
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="type" class="col-sm-2 control-label">记录类型<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="type" name="type" placeholder="type" class="form-control">
+                </div>
+            </div><!--记录类型-->
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="data" class="col-sm-2 control-label">记录值<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="data" name="data"   placeholder="data" class="form-control">
+                </div>
+            </div><!--记录值-->
+           
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="ttl" class="col-sm-2 control-label">TTL<span class="red-fonts">*</span></label>
+                <div class="col-sm-8">
+                    <input id="ttl" name="ttl"   placeholder="TTL" class="form-control">
+                </div>
+            </div><!--TTL-->
+           
+            
+
+        <div class="form-group">
+            <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="updatebtn">确认</button>
+            </div>
+        </div> <!--button-->
+        </form> <!--form-->
+      </div> <!--modal-body-->
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!--解析记录详情模态窗-->
+<div class="modal fade" id='infoModel'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	     <h4 class="modal-title">详情</h4>
+    </div><!--header-->
+    <div class="modal-body">
+        <div class="form-group">
+            <label class="control-label">根域</label>
+             <div class="controls">
+                        <span id="detail_zone" ></span>
+            </div>
+        </div> <!--detail detail_name_cn    end-->
+		
+        <div class="form-group">
+            <label class="control-label">二级域名</label>
+             <div class="controls">
+                        <span id="detail_host" ></span>
+            </div>
+        </div> <!--detail detail_mobile end-->
+        <div class="form-group">
+            <label class="control-label">记录类型</label>
+             <div class="controls">
+                        <span id="detail_type" ></span>
+            </div>
+			
+        </div> <!--detail desc end-->
+        <div class="form-group">
+            <label class="control-label">记录值</label>
+             <div class="controls">
+                        <span id="detail_data"></span>
+            </div>
+        </div> <!--detail deal desc end-->
+
+		
+    </div><!--body-->
+    <div class="modal-footer">
+      	<button type="button" class="btn btn-default update-cancel" data-dismiss="modal">关闭</button>
+   </div><!--footer-->
+
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<script>
+
+$('#editable').DataTable({
+        "bDestroy":true, //加上这个，一旦datatable的数据有增加或者删除，会销毁原有的，重新获取
+        "language": {
+                "lengthMenu": "每页 _MENU_ 条记录",
+                "zeroRecords": "没有找到记录",
+                "sInfo": "第 _PAGE_ 页 ( 总共 _PAGES_ 页 ),显示第 _START_ 至 _END_ 项(总共 _TOTAL_ 项)",
+                "infoEmpty": "无记录",
+                "infoFiltered": "(从 _MAX_ 条记录过滤)",
+                "sSearch": "搜索:",
+                "oPaginate": {
+                "sFirst": "首页",
+                "sPrevious": "上一页",
+                "sNext": "下一页",
+                "sLast": "末页"
+                } 
+        },
+        "order": [[ 1, "asc" ]] 
+});
+
+
+</script>   
+
+<script src="/static/js/named.js"></script>
+{% endblock %}
+

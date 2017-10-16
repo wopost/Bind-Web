@@ -1,5 +1,6 @@
 
-#Flask  Bind-DLZ + Mysql  DNS管理平台
+
+<div align = right>Flask  Bind-DLZ + Mysql  DNS管理平台</div>
 
 系统环境:CentOS 6.5 X64
 

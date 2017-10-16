@@ -112,18 +112,18 @@
 
 6.启动  Bind 服务并设置开机启动脚本
 
-(demo) -bash-4.1# /usr/local/bind/sbin/named
+    (demo) -bash-4.1# /usr/local/bind/sbin/named
 
 监控系统日志：
 
- tail -f /var/log/messages
-如下，说明服务启动正常
+	 tail -f /var/log/messages
+	如下，说明服务启动正常
 
-![image](https://github.com/1032231418/doc/blob/master/images/3.png)
+	![image](https://github.com/1032231418/doc/blob/master/images/3.png)
 
-测试bind连接数据库是否正常:
+	测试bind连接数据库是否正常:
 
-![image](https://github.com/1032231418/doc/blob/master/images/4.png)
+	![image](https://github.com/1032231418/doc/blob/master/images/4.png)
 
 
 设置 Bind  开机启动脚本

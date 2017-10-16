@@ -1,21 +1,24 @@
                 Flask  Bind-DLZ + Mysql  DNS管理平台
 
 Flask  Bind-DLZ + Mysql  DNS管理平台
+
 系统环境:CentOS 6.5 X64
+
 软件版本: 
-  bind-9.9.5.tar.gz  
-mysql-5.6.16.tar.gz
+
+      bind-9.9.5.tar.gz  
+      mysql-5.6.16.tar.gz
 描述： 
 数据库安装就不在絮叨，了解运维的同学都应该知道
 
 一．源码安装配置Bind:
 1.源码编译安装
 
-# tar -zxvf  bind-9.9.5.tar.gz           #解压压缩包
-# cd bind-9.9.5
-#./configure --prefix=/usr/local/bind/ --enable-rrl --enable-threads --enable-newstats --with-dlz-mysql
-# make
-# make install           #源码编译安装完成
+ tar -zxvf  bind-9.9.5.tar.gz           #解压压缩包
+ cd bind-9.9.5
+./configure --prefix=/usr/local/bind/ --enable-rrl --enable-threads --enable-newstats --with-dlz-mysql
+ make
+ make install           #源码编译安装完成
 
  
 2.环境变量配置
@@ -25,22 +28,22 @@ PATH=$PATH:/usr/local/bind/bin:/usr/local/bind/sbin
 export  PATH
 EOF
 
-# source  /etc/profile  #重新加载一下环境变量
-# named -v           #如下图，说明环境变量正常
+ source  /etc/profile  #重新加载一下环境变量
+ named -v           #如下图，说明环境变量正常
 
 ![image](https://github.com/1032231418/doc/blob/master/images/1.png)
 
 
 3.用户添加授权目录
-# useradd  -s  /sbin/nologin  named
-# chown  -R named:named /usr/local/bind/
+ useradd  -s  /sbin/nologin  named
+ chown  -R named:named /usr/local/bind/
 
 
 
 
 
 4.配置Bind
-# vi /usr/local/bind/etc/named.conf
+ vi /usr/local/bind/etc/named.conf
 
 options {
         directory       "/usr/local/bind/";
@@ -96,7 +99,7 @@ view "ours_domain" {
 
 5.配置数据库，导入sql 文件
 
-# mysql -p   #登录数据库
+ mysql -p   #登录数据库
 mysql> CREATE DATABASE  named   CHARACTER SET utf8 COLLATE utf8_general_ci; 
 mysql> source named.sql;             #注意路径，这里我放在当前目录
 就两张表，一个dns用到的表，一个用户管理表
@@ -108,7 +111,7 @@ mysql> source named.sql;             #注意路径，这里我放在当前目录
 
 (demo) -bash-4.1# /usr/local/bind/sbin/named
 监控系统日志：
-# tail -f /var/log/messages
+ tail -f /var/log/messages
 如下，说明服务启动正常
 
 ![image](https://github.com/1032231418/doc/blob/master/images/3.png)
@@ -127,7 +130,7 @@ bind 本文档会附带，传到服务器  /etc/init.d/ 目录
 (demo) -bash-4.1# pkill  named
 (demo) -bash-4.1# /etc/init.d/bind  start            #监控日志，查看启动状态
 (demo) -bash-4.1# chkconfig  --add bind            #加入开机启动
-# tail -f /var/log/messages
+ tail -f /var/log/messages
 
 ![image](https://github.com/1032231418/doc/blob/master/images/5.png)
 
@@ -139,7 +142,8 @@ bind 本文档会附带，传到服务器  /etc/init.d/ 目录
 (demo) -bash-4.1# tar -zxvf Bind-web-1.0.tar.gz  #解压该软件
 (demo) -bash-4.1# cd Bind-web 
 (demo) -bash-4.1# python  run.py     
-#运行软件程序使用flask框架写的，要用pip安装该框架
+
+运行软件程序使用flask框架写的，要用pip安装该框架
 
 http://ip/5000   访问WEB 界面 登录账户 eagle 密码 123456
 

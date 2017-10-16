@@ -1,6 +1,4 @@
-                Flask  Bind-DLZ + Mysql  DNS管理平台
-
-#Flask  Bind-DLZ + Mysql  DNS管理平台
+###Flask  Bind-DLZ + Mysql  DNS管理平台
 
 系统环境:CentOS 6.5 X64
 

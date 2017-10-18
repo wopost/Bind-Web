@@ -36,7 +36,7 @@ $(".update").click(function(){
     $.getJSON("/namedupdate",{'id':id},function(data){
             console.log(data);
             $("#upid").val(data["id"]);
-            $("#zone").val(data["zone"]);
+            $("#zones").val(data["zone"]);
             $("#host").val(data["host"]);
             $("#type").val(data["type"]);
             $("#data").val(data["data"]);

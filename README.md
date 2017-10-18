@@ -165,4 +165,7 @@ http://ip/5000   访问WEB 界面 登录账户 eagle 密码 123456
 				
 ![image](https://github.com/1032231418/doc/blob/master/images/8.png)
 
+解析测试：
+
+![image](https://github.com/1032231418/doc/blob/master/images/jiexi.png)
 

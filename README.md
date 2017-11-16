@@ -17,8 +17,15 @@
 
 	 tar -zxvf  bind-9.9.5.tar.gz           #解压压缩包
 	 cd bind-9.9.5
-	./configure --prefix=/usr/local/bind/ --enable-rrl --enable-threads --enable-newstats --with-dlz-mysql
-	 make
+	 ./configure --prefix=/usr/local/bind/  \
+	 --enable-threads=no \
+	 --enable-newstats   \
+	 --with-dlz-mysql    \
+	 --disable-openssl-version-check
+	 
+     #官网说明强调编译关闭多线程，即--enable-threads=no
+	 
+     make
 	 make install           #源码编译安装完成
 
  
@@ -32,7 +39,9 @@
 	 source  /etc/profile  #重新加载一下环境变量
 	 named -v           #如下图，说明环境变量正常
 
-![image](https://github.com/1032231418/doc/blob/master/images/1.png)
+
+	 
+![](https://github.com/1032231418/doc/blob/master/images/1.png?raw=true)
 
 
 3.用户添加授权目录
@@ -107,7 +116,7 @@
 	mysql> source named.sql;             #注意路径，这里我放在当前目录
 	就两张表，一个dns用到的表，一个用户管理表
 
-![image](https://github.com/1032231418/doc/blob/master/images/2.png)
+![](https://github.com/1032231418/doc/blob/master/images/2.png?raw=true)
 
 
 6.启动  Bind 服务并设置开机启动脚本
@@ -120,11 +129,11 @@
 	 
 如下，说明服务启动正常
 
-![image](https://github.com/1032231418/doc/blob/master/images/3.png)
+![](https://github.com/1032231418/doc/blob/master/images/3.png?raw=true)
 
 	测试bind连接数据库是否正常:
 
-![image](https://github.com/1032231418/doc/blob/master/images/4.png)
+![](https://github.com/1032231418/doc/blob/master/images/4.png?raw=true)
 
 
 设置 Bind  开机启动脚本
@@ -139,8 +148,7 @@
 	(demo) -bash-4.1# chkconfig  --add bind            #加入开机启动
  tail -f /var/log/messages
 
-![image](https://github.com/1032231418/doc/blob/master/images/5.png)
-
+![](https://github.com/1032231418/doc/blob/master/images/5.png?raw=true)
 
 <h2 align = "center">二．配置Bind-Web 管理平台 </h2>
 
@@ -156,16 +164,12 @@ http://ip/5000   访问WEB 界面 登录账户 eagle 密码 123456
 
 功能有，用户管理，域名管理
 
-![image](https://github.com/1032231418/doc/blob/master/images/6.png)
+![](https://github.com/1032231418/doc/blob/master/images/6.png?raw=true)
 
 
+![](https://github.com/1032231418/doc/blob/master/images/7.png?raw=true)
 
-![image](https://github.com/1032231418/doc/blob/master/images/7.png)
+![](https://github.com/1032231418/doc/blob/master/images/8.png?raw=true)				
 
-				
-![image](https://github.com/1032231418/doc/blob/master/images/8.png)
-
-解析测试：
-
-![image](https://github.com/1032231418/doc/blob/master/images/jiexi.png)
+![](https://github.com/1032231418/doc/blob/master/images/jiexi.png?raw=true)
 
